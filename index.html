@@ -8427,6 +8427,13 @@ const subjectSelect = document.getElementById("subjectSelect");
     // No-op for tap mode (kept for compatibility).
   }
 
+  /* WGLT loader signal */
+window.addEventListener("load", function () {
+  if (window.parent) {
+    window.parent.postMessage({ type: "WGLT_READY" }, "*");
+  }
+});
+
   function updatePuzzleInfo() {
     if (!currentPuzzle) {
       puzzleInfoEl.textContent = "No puzzle yet";
