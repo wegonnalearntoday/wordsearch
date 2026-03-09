@@ -4,44 +4,65 @@
   <meta charset="UTF-8" />
   <title>Word Search Black Historical Figures & Events</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      /* Pan-African palette */
-      --bg: #070707;                 /* deep black */
-      --card: #111113;               /* panel base */
-      --panel: #0f1117;
-      --text: #f7f7f7;
-      --muted: #b7bccb;
+      --bg: #050607;
+      --bg-2: #0a1016;
+      --card: rgba(10, 20, 28, 0.92);
+      --card-2: rgba(14, 28, 38, 0.96);
+      --panel: #0d1620;
+      --panel-edge: rgba(243, 193, 94, 0.34);
+      --text: #f6f0dd;
+      --muted: #c8c1ad;
 
-      --red: #d90429;
-      --green: #1f9d55;
-      --gold: #f6c445;
+      --gold: #f3c15e;
+      --gold-deep: #c78a2c;
+      --copper: #b56d3e;
+      --teal: #1a6c75;
+      --teal-bright: #2fa7b5;
+      --ember: #a83f2f;
+      --olive: #6f7a2b;
 
-      /* UI accents */
       --accent: var(--gold);
-      --accent-strong: var(--red);
-      --accent-soft: rgba(246, 196, 69, 0.18);
+      --accent-strong: var(--copper);
+      --accent-soft: rgba(243, 193, 94, 0.22);
+      --danger: #cf5a43;
+      --found: #2e9b77;
 
-      --danger: var(--red);
-      --found: var(--green);
+      --radius: 18px;
+      --shadow: 0 18px 38px rgba(0, 0, 0, 0.48);
+      --glow: 0 0 0 1px rgba(243, 193, 94, 0.18), 0 0 26px rgba(47, 167, 181, 0.08);
 
-      --radius: 16px;
-      --shadow: 0 12px 30px rgba(0,0,0,0.55);
+      --font-display: "Bebas Neue", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      --font-body: "Montserrat", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-* {
+
+    * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
     }
 
+    html {
+      background: #000;
+    }
+
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, rgba(217,4,41,0.28) 0, rgba(7,7,7,0.98) 55%, rgba(31,157,85,0.18) 100%);
+      font-family: var(--font-body);
+      background:
+        radial-gradient(circle at 50% -10%, rgba(243, 193, 94, 0.16) 0%, rgba(243, 193, 94, 0.02) 25%, transparent 48%),
+        radial-gradient(circle at 12% 20%, rgba(47, 167, 181, 0.12) 0%, transparent 32%),
+        radial-gradient(circle at 85% 26%, rgba(168, 63, 47, 0.16) 0%, transparent 28%),
+        linear-gradient(180deg, #020304 0%, #070a0d 35%, #050607 100%);
       color: var(--text);
       display: flex;
       justify-content: center;
-      padding: 10px;
+      padding: 14px;
+      min-height: 100vh;
     }
 
     .app {
@@ -50,30 +71,35 @@
       background: transparent;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
 
     header {
       text-align: center;
-      padding: 6px 4px 4px;
+      padding: 8px 6px 2px;
     }
 
     header h1 {
       margin: 0;
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      letter-spacing: 0.04em;
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 5vw, 4.4rem);
+      line-height: 0.95;
+      letter-spacing: 0.045em;
+      color: #f5ebd2;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.55), 0 0 18px rgba(243, 193, 94, 0.12);
     }
 
     header p {
-      margin: 4px 0 0;
-      font-size: 0.9rem;
+      margin: 6px auto 0;
+      font-size: 0.92rem;
       color: var(--muted);
+      max-width: 760px;
     }
 
     .layout {
       display: grid;
       grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
-      gap: 12px;
+      gap: 14px;
     }
 
     @media (max-width: 850px) {
@@ -83,33 +109,56 @@
     }
 
     .panel {
-      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(15,23,42,0.94));
+      background:
+        linear-gradient(180deg, rgba(20, 35, 46, 0.97) 0%, rgba(8, 16, 23, 0.97) 100%);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 10px 12px 12px;
-      border: 1px solid rgba(148,163,184,0.35);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.04);
+      padding: 12px 14px 14px;
+      border: 1px solid var(--panel-edge);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(243, 193, 94, 0.08), transparent 28%, transparent 72%, rgba(47, 167, 181, 0.08));
+      opacity: 0.9;
+    }
+
+    .panel > * {
+      position: relative;
+      z-index: 1;
     }
 
     .panel h2 {
-      margin: 0 0 6px;
-      font-size: 1rem;
+      margin: 0 0 8px;
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 2.3vw, 2rem);
+      line-height: 0.95;
+      letter-spacing: 0.04em;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
+      color: var(--text);
     }
 
     .panel h2 span {
-      font-size: 0.8rem;
-      font-weight: 500;
+      font-family: var(--font-body);
+      font-size: 0.76rem;
+      font-weight: 600;
       color: var(--muted);
+      letter-spacing: 0.02em;
     }
 
     .field-group {
       display: flex;
       flex-direction: column;
       gap: 6px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     label {
@@ -119,24 +168,30 @@
       justify-content: space-between;
       align-items: center;
       gap: 6px;
+      font-weight: 600;
     }
 
     input[type="text"],
     select {
       width: 100%;
-      border-radius: 10px;
-      border: 1px solid rgba(148,163,184,0.6);
-      background: rgba(15,23,42,0.9);
+      border-radius: 12px;
+      border: 1px solid rgba(243, 193, 94, 0.28);
+      background: linear-gradient(180deg, rgba(11, 22, 31, 0.96), rgba(8, 15, 22, 0.96));
       color: var(--text);
-      padding: 6px 8px;
-      font-size: 0.88rem;
+      padding: 9px 10px;
+      font-size: 0.9rem;
       outline: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    input::placeholder {
+      color: rgba(200, 193, 173, 0.72);
     }
 
     input:focus,
     select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(79,209,197,0.5);
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(243, 193, 94, 0.14), 0 0 18px rgba(47, 167, 181, 0.12);
     }
 
     .small-inputs {
@@ -157,53 +212,63 @@
     .button-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
+      gap: 8px;
+      margin-top: 6px;
     }
 
     button {
       border-radius: 999px;
       border: none;
-      padding: 6px 12px;
-      font-size: 0.85rem;
+      padding: 8px 14px;
+      font-size: 0.84rem;
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 700;
+      font-family: var(--font-body);
+      letter-spacing: 0.01em;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 4px;
-      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+      transition: transform 0.08s ease, box-shadow 0.16s ease, background 0.16s ease, border-color 0.16s ease;
       user-select: none;
     }
 
+    button:hover {
+      transform: translateY(-1px);
+    }
+
     button:active {
-      transform: scale(0.96);
+      transform: scale(0.97);
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
-      color: #081019;
-      box-shadow: 0 10px 24px rgba(246,196,69,0.18);
+      background: linear-gradient(135deg, #f4cb78 0%, #d69744 46%, #b36734 100%);
+      color: #16110a;
+      box-shadow: 0 12px 28px rgba(179, 103, 52, 0.28);
+      text-transform: uppercase;
     }
 
     .btn-secondary {
-      background: rgba(148,163,184,0.14);
+      background: linear-gradient(180deg, rgba(25, 65, 73, 0.5), rgba(10, 30, 37, 0.75));
       color: var(--text);
-      border: 1px solid rgba(148,163,184,0.5);
+      border: 1px solid rgba(47, 167, 181, 0.28);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .btn-secondary:hover {
+      box-shadow: 0 0 0 1px rgba(47, 167, 181, 0.22), 0 0 16px rgba(47, 167, 181, 0.08);
     }
 
     .btn-ghost {
       background: transparent;
       color: var(--muted);
-      border: 1px dashed rgba(148,163,184,0.4);
+      border: 1px dashed rgba(243, 193, 94, 0.3);
     }
 
     .btn-small {
       font-size: 0.75rem;
-      padding: 4px 10px;
+      padding: 6px 11px;
     }
-
-    /* GRID */
 
     .play-panel {
       display: flex;
@@ -214,10 +279,13 @@
     .grid-container {
       position: relative;
       margin-top: 4px;
-      border-radius: 14px;
-      background: radial-gradient(circle at top, rgba(246,196,69,0.22), rgba(15,17,23,0.96));
-      padding: 8px;
-      border: 1px solid rgba(148,163,184,0.45);
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at top, rgba(243, 193, 94, 0.16), rgba(13, 23, 31, 0.98) 50%),
+        linear-gradient(180deg, rgba(14, 28, 38, 0.98), rgba(7, 15, 21, 0.98));
+      padding: 10px;
+      border: 1px solid rgba(243, 193, 94, 0.24);
+      box-shadow: var(--glow);
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -226,58 +294,56 @@
 
     .grid {
       display: grid;
-      gap: 2px;
+      gap: 3px;
       width: 100%;
-      max-width: 450px;
+      max-width: 460px;
       touch-action: manipulation;
       justify-self: center;
       margin: 0 auto;
     }
 
     .cell {
-  /* remove fixed sizing and let CSS scale each square automatically */
-  aspect-ratio: 1 / 1;
-  width: 100%;                 /* grid will size them evenly */
-  
-  /* visual styling kept from your original */
-  border-radius: 6px;
-  background: rgba(15,23,42,0.93);
-  color: var(--text);
-  border: 1px solid rgba(148,163,184,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  font-weight: 600;
-  text-transform: uppercase;
-
-  /* scale text so large grids still fit nicely */
-  font-size: clamp(0.45rem, 1.4vw, 1rem);
-}
-
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      border-radius: 7px;
+      background: linear-gradient(180deg, rgba(9, 28, 39, 0.95), rgba(7, 17, 25, 0.98));
+      color: var(--text);
+      border: 1px solid rgba(243, 193, 94, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-family: var(--font-display);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: clamp(0.55rem, 1.5vw, 1.1rem);
+      text-shadow: 0 1px 0 rgba(0,0,0,0.45);
+    }
 
     @media (max-width: 550px) {
       .cell {
         width: 26px;
         height: 26px;
-        font-size: 0.9rem;
+        font-size: 0.92rem;
       }
     }
 
     .cell.selected {
-      background: var(--accent-soft);
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(79,209,197,0.7);
+      background: linear-gradient(180deg, rgba(214, 151, 68, 0.95), rgba(179, 103, 52, 0.95));
+      color: #16110a;
+      border-color: #f5d28c;
+      box-shadow: 0 0 0 1px rgba(245, 210, 140, 0.4), 0 0 18px rgba(243, 193, 94, 0.14);
     }
 
     .cell.found {
-      background: rgba(31,157,85,0.35);
-      border-color: var(--found);
-      color: #f0fff4;
+      background: linear-gradient(180deg, rgba(34, 122, 112, 0.9), rgba(22, 89, 82, 0.95));
+      border-color: rgba(117, 223, 196, 0.7);
+      color: #f7fff8;
     }
 
     .status-bar {
-      margin-top: 6px;
+      margin-top: 8px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -297,8 +363,8 @@
       width: 8px;
       height: 8px;
       border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(79,209,197,0.18);
+      background: var(--gold);
+      box-shadow: 0 0 0 4px rgba(243, 193, 94, 0.16);
     }
 
     .status-message {
@@ -307,24 +373,23 @@
       min-height: 1.4em;
     }
 
-    /* WORD LIST */
-
     .word-list {
-      margin-top: 4px;
-      padding: 6px 8px;
-      border-radius: 10px;
-      background: rgba(15,23,42,0.95);
-      border: 1px solid rgba(148,163,184,0.45);
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(11, 22, 31, 0.96), rgba(8, 17, 23, 0.96));
+      border: 1px solid rgba(243, 193, 94, 0.18);
     }
 
     .word-list-title {
       font-size: 0.86rem;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       color: var(--muted);
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 6px;
+      font-weight: 700;
     }
 
     .word-list ul {
@@ -338,16 +403,16 @@
     }
 
     .word-list li {
-      padding: 3px 8px;
+      padding: 4px 9px;
       border-radius: 999px;
-      background: rgba(15,23,42,0.9);
-      border: 1px solid rgba(148,163,184,0.5);
+      background: linear-gradient(180deg, rgba(17, 37, 49, 0.92), rgba(8, 19, 27, 0.98));
+      border: 1px solid rgba(243, 193, 94, 0.14);
       white-space: nowrap;
     }
 
     .word-list li.found {
-      background: rgba(31,157,85,0.40);
-      border-color: var(--found);
+      background: linear-gradient(180deg, rgba(34, 122, 112, 0.92), rgba(22, 89, 82, 0.96));
+      border-color: rgba(117, 223, 196, 0.65);
       color: #f0fff4;
       text-decoration: line-through;
     }
@@ -363,7 +428,7 @@
 <body>
 <div class="app">
   <header>
-    <h1>Word Search Black Historical Figures & Events</h1>
+    <h1>Word Search Black Historical Figures</h1>
     <p>Choose a subject, select a person/event from the dropdown menu, pick difficulty, and click to play.</p>
   </header>
 
@@ -372,14 +437,14 @@
     <section class="panel">
       <h2>
         Pick your Person or Event
-        <span>Subject • Topic • Difficulty • Create</span>
+        <span></span>
       </h2>
 
       <!-- Subject / Topic -->
       <div class="field-group">
         <label>
           Subject / Topic Group
-          <span class="hint">Matches your WGLT subjects</span>
+          <span class="hint"></span>
         </label>
         <select id="subjectSelect"></select>
       </div>
@@ -426,7 +491,7 @@
     <section class="panel play-panel">
       <h2>
         Let's Get This Knowledge
-        <span>Tap the first letter, then tap the last letter of the word.</span>
+        <span></span>
       </h2>
 
       <div class="grid-container">
@@ -7890,6 +7955,187 @@
     // 🔜 Later you'll add: "SPORTS": { ... }, "INVENTORS": { ... }, etc.
   };
 
+  /***********************
+ * WGLT MASTER ROSTER GENERATOR
+ * Paste this BELOW: const TOPIC_LIBRARY = { ... }
+ ***********************/
+
+/** 1) Build roster from TOPIC_LIBRARY */
+function buildWgltRosterFromTopicLibrary(topicLibrary){
+  const used = new Set();
+
+  const clean = (s)=>String(s||"").trim();
+  const lettersOnly = (s)=>clean(s).toUpperCase().replace(/[^A-Z]/g,"");
+  const wordsFrom = (arr)=>Array.isArray(arr) ? arr.map(w=>lettersOnly(w)).filter(Boolean) : [];
+
+  function makeLastNameCode(fullName){
+    // Prefer the actual last token, fallback to any token with letters
+    const tokens = clean(fullName).split(/\s+/).filter(Boolean);
+    let last = tokens.length ? tokens[tokens.length - 1] : fullName;
+    last = lettersOnly(last);
+
+    // If last is too short, try second-to-last, else build from fullName letters
+    if (last.length < 4 && tokens.length >= 2) last = lettersOnly(tokens[tokens.length - 2] || last);
+    if (last.length < 4) last = lettersOnly(fullName);
+
+    // Enforce 4–8
+    if (last.length > 8) last = last.slice(0, 8);
+    if (last.length < 4){
+      // pad by repeating last char or adding X
+      const padChar = last[last.length - 1] || "X";
+      while (last.length < 4) last += padChar;
+    }
+
+    // Ensure uniqueness: if collision, tweak last char(s) deterministically
+    let code = last;
+    let i = 0;
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    while (used.has(code)){
+      i++;
+      // swap final letter based on i (keeps 4–8 rule)
+      const base = code.slice(0, Math.max(3, code.length - 1));
+      const pick = alphabet[i % alphabet.length];
+      code = (base + pick).slice(0, 8);
+      if (code.length < 4) code = (code + "X".repeat(4)).slice(0,4);
+      if (i > 200) break; // ultra-safe guard
+    }
+    used.add(code);
+    return code;
+  }
+
+  function makeElemBio(fullName, category, regWords){
+    const hint = regWords.slice(0, 4).filter(w=>w.length>=3).join(", ");
+    const who = clean(fullName);
+    const cat = clean(category);
+    return hint
+      ? `${who} is connected to ${cat} through ideas like ${hint.toLowerCase()}.`
+      : `${who} is an important part of ${cat} history.`;
+  }
+
+  function makeHsBio(fullName, category, challWords){
+    const hint = challWords.slice(0, 5).filter(w=>w.length>=5).join(", ");
+    const who = clean(fullName);
+    const cat = clean(category);
+    return hint
+      ? `${who} shaped ${cat} in deeper ways tied to: ${hint.toLowerCase()}.`
+      : `${who} made lasting contributions that still matter today in ${cat}.`;
+  }
+
+  const roster = [];
+  const categories = Object.keys(topicLibrary || {});
+
+  for (const category of categories){
+    const topics = topicLibrary[category] || {};
+    for (const fullName of Object.keys(topics)){
+      const data = topics[fullName] || {};
+      const reg = wordsFrom(data.regular);
+      const ch  = wordsFrom(data.challenging);
+
+      const lastName = makeLastNameCode(fullName);
+      const elemInitial = lettersOnly(fullName).slice(0,1) || "X";
+
+      roster.push({
+        lastName,                 // 4–8 letters, unique, uppercase
+        fullName: clean(fullName),
+        category: clean(category),
+        elemInitial,
+        elemBio: makeElemBio(fullName, category, reg),
+        hsBio: makeHsBio(fullName, category, ch),
+        wordSearch: { regular: reg, challenging: ch }
+      });
+    }
+  }
+
+  return roster;
+}
+
+/** 2) Create the master roster */
+const WGLT_ROSTER = buildWgltRosterFromTopicLibrary(TOPIC_LIBRARY);
+
+/** 3) Balanced category rotation (round-robin) */
+function makeCategoryRotator(roster){
+  const cats = [...new Set(roster.map(r=>r.category))].sort();
+  const byCat = new Map();
+  cats.forEach(c => byCat.set(c, roster.filter(r=>r.category===c)));
+
+  // persistent pointer across sessions (so it doesn’t “feel random” every reload)
+  const KEY = "wglt_cat_index_v1";
+
+  function getIndex(){
+    const n = parseInt(localStorage.getItem(KEY) || "0", 10);
+    return Number.isFinite(n) ? n : 0;
+  }
+  function setIndex(i){ localStorage.setItem(KEY, String(i)); }
+
+  function nextCategory(){
+    const i = getIndex();
+    const cat = cats[i % cats.length];
+    setIndex((i + 1) % cats.length);
+    return cat;
+  }
+
+  // optional: avoid repeats per-category
+  const seenKey = "wglt_seen_bycat_v1";
+  function loadSeen(){
+    try { return JSON.parse(localStorage.getItem(seenKey) || "{}"); }
+    catch { return {}; }
+  }
+  function saveSeen(obj){ localStorage.setItem(seenKey, JSON.stringify(obj)); }
+
+  function pickNextFigure(){
+    const cat = nextCategory();
+    const pool = byCat.get(cat) || [];
+    if (!pool.length) return null;
+
+    const seen = loadSeen();
+    const used = new Set(seen[cat] || []);
+
+    // pick first unseen; if all seen, reset that category
+    let pick = pool.find(p => !used.has(p.lastName));
+    if (!pick){
+      used.clear();
+      pick = pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    used.add(pick.lastName);
+    seen[cat] = [...used];
+    saveSeen(seen);
+
+    return pick;
+  }
+
+  return { cats, byCat, nextCategory, pickNextFigure };
+}
+
+const WGLT_ROTATOR = makeCategoryRotator(WGLT_ROSTER);
+
+/** 4) Utility: download JSON (so every other HTML game can share it) */
+function downloadWgltRosterJson(filename="wglt-roster.json"){
+  const payload = {
+    version: "1.0",
+    createdAt: new Date().toISOString(),
+    total: WGLT_ROSTER.length,
+    categories: [...new Set(WGLT_ROSTER.map(r=>r.category))].sort(),
+    roster: WGLT_ROSTER
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/** 5) Download helper kept for future admin use, but no player-facing button is attached. */
+
+/** 6) Example usage (you can delete these lines):
+ * const next = WGLT_ROTATOR.pickNextFigure();
+ * console.log("Next balanced pick:", next);
+ */
+
   // -----------------------------
   // 3) Utility: normalize name
   // -----------------------------
@@ -8731,9 +8977,13 @@ window.addEventListener("load", function () {
   });
 
 </script>
-
-
-
-
+   <script>
+/* Notify Wix loader that the HTML game is ready */
+window.addEventListener("load", function () {
+  if (window.parent) {
+    window.parent.postMessage({ type: "WGLT_READY" }, "*");
+  }
+});
+</script>
 </body>
 </html>
