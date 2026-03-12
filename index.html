@@ -188,6 +188,16 @@
       color: rgba(200, 193, 173, 0.72);
     }
 
+    select {
+      background: #000;
+      color: var(--text);
+    }
+
+    select option {
+      background: #000;
+      color: var(--text);
+    }
+
     input:focus,
     select:focus {
       border-color: var(--gold);
@@ -322,10 +332,29 @@
     }
 
     @media (max-width: 550px) {
+      .grid {
+        gap: 2px;
+        max-width: min(100%, 96vw);
+      }
+
+      .grid-container {
+        padding: 8px;
+      }
+
       .cell {
-        width: 26px;
-        height: 26px;
-        font-size: 0.92rem;
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        font-size: 0.84rem;
+      }
+
+      .word-list ul {
+        gap: 5px 7px;
+      }
+
+      .word-list li {
+        padding: 4px 8px;
+        font-size: 0.8rem;
       }
     }
 
@@ -415,6 +444,48 @@
       border-color: rgba(117, 223, 196, 0.65);
       color: #f0fff4;
       text-decoration: line-through;
+      box-shadow: 0 0 0 1px rgba(117, 223, 196, 0.18), 0 0 16px rgba(117, 223, 196, 0.18);
+      transform: scale(1.03);
+      animation: foundPulse 0.55s ease;
+    }
+
+    @keyframes foundPulse {
+      0% { transform: scale(0.92); box-shadow: 0 0 0 0 rgba(117, 223, 196, 0.0); }
+      55% { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(117, 223, 196, 0.14); }
+      100% { transform: scale(1.03); box-shadow: 0 0 0 1px rgba(117, 223, 196, 0.18), 0 0 16px rgba(117, 223, 196, 0.18); }
+    }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 9999;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -12vh;
+      width: 10px;
+      height: 16px;
+      border-radius: 2px;
+      opacity: 0.95;
+      animation: confettiFall linear forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translate3d(0, -12vh, 0) rotate(0deg);
+        opacity: 0;
+      }
+      12% {
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(var(--drift, 0px), 112vh, 0) rotate(var(--spin, 720deg));
+        opacity: 0;
+      }
     }
 
     /* SHARE */
@@ -518,6 +589,7 @@
     </section>
   </div>
 </div>
+<div id="confettiLayer" class="confetti-layer" aria-hidden="true"></div>
 
 <script>
 
@@ -8241,6 +8313,50 @@ const subjectSelect = document.getElementById("subjectSelect");
   const difficultySelect = document.getElementById("difficultySelect");
   const aiHintEl = document.getElementById("aiHint");
   const hintBtn = document.getElementById("hintBtn");
+  const confettiLayer = document.getElementById("confettiLayer");
+  let confettiBurstTimeout = null;
+
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function launchConfettiBurst(pieceCount = 120) {
+    if (!confettiLayer) return;
+
+    if (confettiBurstTimeout) {
+      clearTimeout(confettiBurstTimeout);
+      confettiBurstTimeout = null;
+    }
+
+    confettiLayer.innerHTML = "";
+    const colors = ["#f3c15e", "#2fa7b5", "#cf5a43", "#6f7a2b", "#f6f0dd", "#b56d3e"];
+
+    for (let i = 0; i < pieceCount; i++) {
+      const piece = document.createElement("span");
+      piece.className = "confetti-piece";
+      piece.style.left = `${Math.random() * 100}%`;
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDuration = `${3 + Math.random() * 1.8}s`;
+      piece.style.animationDelay = `${Math.random() * 0.35}s`;
+      piece.style.setProperty("--drift", `${-140 + Math.random() * 280}px`);
+      piece.style.setProperty("--spin", `${540 + Math.random() * 900}deg`);
+      if (Math.random() > 0.5) {
+        piece.style.width = "8px";
+        piece.style.height = "8px";
+        piece.style.borderRadius = "50%";
+      }
+      confettiLayer.appendChild(piece);
+    }
+
+    confettiBurstTimeout = setTimeout(() => {
+      confettiLayer.innerHTML = "";
+      confettiBurstTimeout = null;
+    }, 5600);
+  }
 
   function showCreatorStatus(msg, isError = false) {
     creatorStatusEl.textContent = msg || "";
@@ -8320,12 +8436,20 @@ const subjectSelect = document.getElementById("subjectSelect");
 
     const sortedWords = [...wordList].sort((a, b) => b.length - a.length);
 
+    const directionUsage = new Map(DIRECTIONS.map(dir => [`${dir.dr},${dir.dc}`, 0]));
+
     for (const word of sortedWords) {
       let placed = false;
-      const maxAttempts = 120;
+      const maxAttempts = 160;
+      const directionPool = [...DIRECTIONS].sort((a, b) => {
+        const aKey = `${a.dr},${a.dc}`;
+        const bKey = `${b.dr},${b.dc}`;
+        const usageDiff = (directionUsage.get(aKey) || 0) - (directionUsage.get(bKey) || 0);
+        return usageDiff !== 0 ? usageDiff : Math.random() - 0.5;
+      });
 
-      for (let attempt = 0; attempt < maxAttempts && !placed; attempt++) {
-        const dir = DIRECTIONS[randomInt(0, DIRECTIONS.length - 1)];
+      for (const dir of directionPool) {
+        if (placed) break;
         let minRow = 0, maxRow = size - 1;
         let minCol = 0, maxCol = size - 1;
 
@@ -8334,13 +8458,25 @@ const subjectSelect = document.getElementById("subjectSelect");
         if (dir.dc === 1) { minCol = 0;              maxCol = size - word.length; }
         if (dir.dc === -1){ minCol = word.length - 1; maxCol = size - 1; }
 
-        const row = randomInt(minRow, maxRow);
-        const col = randomInt(minCol, maxCol);
+        if (minRow > maxRow || minCol > maxCol) continue;
 
-        if (canPlaceWord(grid, word, row, col, dir)) {
+        const positions = [];
+        for (let attempt = 0; attempt < maxAttempts / DIRECTIONS.length; attempt++) {
+          positions.push({
+            row: randomInt(minRow, maxRow),
+            col: randomInt(minCol, maxCol)
+          });
+        }
+        shuffleArray(positions);
+
+        for (const { row, col } of positions) {
+          if (!canPlaceWord(grid, word, row, col, dir)) continue;
           const cells = placeWord(grid, word, row, col, dir);
           placedWords.push({ text: word, cells, found: false });
+          const key = `${dir.dr},${dir.dc}`;
+          directionUsage.set(key, (directionUsage.get(key) || 0) + 1);
           placed = true;
+          break;
         }
       }
 
@@ -8502,6 +8638,7 @@ const subjectSelect = document.getElementById("subjectSelect");
 
     const allFound = currentPuzzle.words.every(w => w.found);
     if (allFound && currentPuzzle.words.length > 0) {
+      launchConfettiBurst();
       showPlayStatus("Puzzle complete! All words found 🎉", false);
     }
   }
